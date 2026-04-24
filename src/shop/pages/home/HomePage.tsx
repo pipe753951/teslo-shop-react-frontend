@@ -1,5 +1,11 @@
+import ShopJumbotron from "@/shop/components/ShopJumbotron";
+
 const HomePage = function () {
-  return <div>HomePage</div>;
+  return (
+    <>
+      <ShopJumbotron title="Todos los productos" />
+    </>
+  );
 };
 
 export default HomePage;
