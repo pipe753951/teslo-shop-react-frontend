@@ -2,8 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
-const FilterSidebar = function () {
+interface Props {
+  className?: string;
+}
+
+const FilterSidebar = function ({ className }: Props) {
   const sizes = [
     { id: "xs", label: "XS" },
     { id: "s", label: "S" },
@@ -14,7 +19,7 @@ const FilterSidebar = function () {
   ];
 
   return (
-    <div className="w-64 space-y-6">
+    <div className={cn("w-64 space-y-6", className)}>
       <div>
         <h3 className="font-semibold text-lg mb-4">Filtros</h3>
       </div>
