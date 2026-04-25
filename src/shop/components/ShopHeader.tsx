@@ -13,7 +13,7 @@ const ShopHeader = function () {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="md:hidden">
+            <Button variant="transparent" size="icon" className="md:hidden">
               <Menu className="h-5 w-5" />
             </Button>
             <h1 className="text-xl font-semibold tracking-tight">
@@ -61,11 +61,11 @@ const ShopHeader = function () {
               </div>
             </div>
 
-            <Button variant="ghost" size="icon" className="md:hidden">
+            <Button variant="transparent" size="icon" className="md:hidden">
               <Search className="h-5 w-5" />
             </Button>
 
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="transparent" size="icon" className="relative">
               <ShoppingBag className="h-5 w-5" />
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
