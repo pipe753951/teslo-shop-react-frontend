@@ -11,7 +11,7 @@ interface Props {
 const ProductCard = function (props: Props) {
   const { name, price, image, category } = props;
   return (
-    <Card className="group border-0 shadow-none product-card-hover cursor-pointer">
+    <Card className="group border-0 shadow-none product-card-hover cursor-pointer p-0">
       <CardContent className="p-0">
         <div className="relative aspect-square overflow-hidden bg-muted rounded-lg">
           <img
