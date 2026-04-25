@@ -1,14 +1,41 @@
+import { cn } from "@/lib/utils";
+
+import { useSearchParams } from "react-router";
+
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { cn } from "@/lib/utils";
 
 interface Props {
   className?: string;
 }
 
 const FilterSidebar = function ({ className }: Props) {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentSizes: string[] = searchParams.get("sizes")?.split(",") || []; //* e.g. XS, S, M.
+
+  const handleChangeSizeList = (size: string) => {
+    const newSizes = currentSizes.includes(size)
+      ? currentSizes.filter((s) => s !== size)
+      : [...currentSizes, size];
+
+    setSearchParams((prevSearchParams) => {
+      const newSearchParams = new URLSearchParams(prevSearchParams);
+
+      newSearchParams.set("page", "1");
+
+      if (newSizes.length === 0) {
+        newSearchParams.delete("sizes");
+      } else {
+        newSearchParams.set("sizes", newSizes.join(","));
+      }
+
+      return newSearchParams;
+    });
+  };
+
   const sizes = [
     { id: "xs", label: "XS" },
     { id: "s", label: "S" },
@@ -29,7 +56,13 @@ const FilterSidebar = function ({ className }: Props) {
         <h4 className="font-medium">Tallas</h4>
         <div className="grid grid-cols-3 gap-2">
           {sizes.map((size) => (
-            <Button key={size.id} variant="outline" size="sm" className="h-8">
+            <Button
+              key={size.id}
+              onClick={() => handleChangeSizeList(size.id)}
+              variant={currentSizes.includes(size.id) ? "default" : "outline"}
+              size="sm"
+              className="h-8"
+            >
               {size.label}
             </Button>
           ))}
