@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router";
 
-const usePageNumber = function () {
+const usePageNumberQuery = function () {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
@@ -28,4 +28,4 @@ const usePageNumber = function () {
   return [currentPage, setCurrentPage] as const;
 };
 
-export default usePageNumber;
+export default usePageNumberQuery;
