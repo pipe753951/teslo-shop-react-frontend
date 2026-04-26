@@ -1,15 +1,15 @@
-import { useRef, useState, type KeyboardEvent } from "react";
+import { useRef, type KeyboardEvent } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
 
 import { cn } from "@/lib/utils";
 
-import { Menu, Search, ShoppingBag } from "lucide-react";
+import { Menu, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const ShopHeader = function () {
-  const [cartCount] = useState(3);
+  // const [cartCount] = useState(3);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const { gender } = useParams();
@@ -88,8 +88,8 @@ const ShopHeader = function () {
             </Link>
           </nav>
 
-          {/* Search and Cart */}
-          <div className="flex items-center space-x-4">
+          {/* Search and Account */}
+          <div className="flex items-center gap-4">
             <div className="hidden md:flex items-center space-x-2">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -107,14 +107,16 @@ const ShopHeader = function () {
               <Search className="h-5 w-5" />
             </Button>
 
-            <Button variant="transparent" size="icon" className="relative">
-              <ShoppingBag className="h-5 w-5" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
-                  {cartCount}
-                </span>
-              )}
-            </Button>
+            <Link to="/auth/login" className="flex">
+              <Button variant="default" size="sm">
+                Inicia sesión
+              </Button>
+            </Link>
+            <Link to="/auth/login" className="flex">
+              <Button variant="destructive" size="sm">
+                Panel administrativo
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

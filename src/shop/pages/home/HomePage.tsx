@@ -7,7 +7,6 @@ import ProductsGrid from "@/shop/components/ProductsGrid";
 import ShopJumbotron from "@/shop/components/ShopJumbotron";
 
 const HomePage = function () {
-  // const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = usePageNumberQuery();
 
   const handleUpdatePage = setCurrentPage;
