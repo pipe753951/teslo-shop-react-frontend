@@ -10,13 +10,9 @@ import { Input } from "@/components/ui/input";
 import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
 
 const ShopHeader = function () {
-  // const [cartCount] = useState(3);
-
   const [searchParams, setSearchParams] = useSearchParams();
   const { gender } = useParams();
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-  console.debug({ gender });
 
   const queryParam = searchParams.get("query");
 
