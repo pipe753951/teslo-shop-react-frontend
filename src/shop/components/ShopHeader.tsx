@@ -1,5 +1,7 @@
 import { useRef, useState, type KeyboardEvent } from "react";
-import { useSearchParams } from "react-router";
+import { Link, useParams, useSearchParams } from "react-router";
+
+import { cn } from "@/lib/utils";
 
 import { Menu, Search, ShoppingBag } from "lucide-react";
 
@@ -10,7 +12,10 @@ const ShopHeader = function () {
   const [cartCount] = useState(3);
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const { gender } = useParams();
   const inputRef = useRef<HTMLInputElement | null>(null);
+
+  console.debug({ gender });
 
   const queryParam = searchParams.get("query");
 
@@ -45,30 +50,42 @@ const ShopHeader = function () {
 
           {/* Navigation - Desktop */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a
-              href="#"
-              className="text-sm font-medium transition-colors hover:text-primary"
+            <Link
+              to="/"
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-primary",
+                !gender ? "underline underline-offset-8" : "",
+              )}
             >
-              Camisetas
-            </a>
-            <a
-              href="#"
-              className="text-sm font-medium transition-colors hover:text-primary"
+              Inicio
+            </Link>
+            <Link
+              to="/gender/men"
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-primary",
+                gender === "men" ? "underline underline-offset-8" : "",
+              )}
             >
-              Sudaderas
-            </a>
-            <a
-              href="#"
-              className="text-sm font-medium transition-colors hover:text-primary"
+              Hombres
+            </Link>
+            <Link
+              to="/gender/women"
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-primary",
+                gender === "women" ? "underline underline-offset-8" : "",
+              )}
             >
-              Chaquetas
-            </a>
-            <a
-              href="#"
-              className="text-sm font-medium transition-colors hover:text-primary"
+              Mujeres
+            </Link>
+            <Link
+              to="/gender/kids"
+              className={cn(
+                "text-sm font-medium transition-colors hover:text-primary",
+                gender === "kids" ? "underline underline-offset-8" : "",
+              )}
             >
-              Accesorios
-            </a>
+              Niños
+            </Link>
           </nav>
 
           {/* Search and Cart */}
