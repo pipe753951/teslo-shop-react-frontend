@@ -8,11 +8,14 @@ const usePageNumberQuery = function () {
     const evaluatingCurrentPageParam = parseInt(searchParams.get("page"));
     if (!isNaN(evaluatingCurrentPageParam)) return;
 
-    setSearchParams((prevSearchParams) => {
-      const newSearchParams = new URLSearchParams(prevSearchParams);
-      newSearchParams.set("page", "1");
-      return newSearchParams;
-    });
+    setSearchParams(
+      (prevSearchParams) => {
+        const newSearchParams = new URLSearchParams(prevSearchParams);
+        newSearchParams.set("page", "1");
+        return newSearchParams;
+      },
+      { replace: true },
+    );
   }, [searchParams, setSearchParams]);
 
   const currentPage = parseInt(searchParams.get("page"));

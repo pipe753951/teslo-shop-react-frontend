@@ -24,11 +24,14 @@ const useProductFilterQuery = function () {
       return;
     }
 
-    setSearchParams((prevSearchParams) => {
-      const newSearchParams = new URLSearchParams(prevSearchParams);
-      newSearchParams.set("filter", "any");
-      return newSearchParams;
-    });
+    setSearchParams(
+      (prevSearchParams) => {
+        const newSearchParams = new URLSearchParams(prevSearchParams);
+        newSearchParams.set("filter", "any");
+        return newSearchParams;
+      },
+      { replace: true },
+    );
   }, [searchParams, setSearchParams]);
 
   const priceFilterQueryParam = searchParams.get("filter");
@@ -40,11 +43,14 @@ const useProductFilterQuery = function () {
     : "any";
 
   const setCurrentPriceFilter = (priceFilter: PriceFilter) => {
-    setSearchParams((prevSearchParams) => {
-      const newSearchParams = new URLSearchParams(prevSearchParams);
-      newSearchParams.set("filter", priceFilter);
-      return newSearchParams;
-    });
+    setSearchParams(
+      (prevSearchParams) => {
+        const newSearchParams = new URLSearchParams(prevSearchParams);
+        newSearchParams.set("filter", priceFilter);
+        return newSearchParams;
+      },
+      { replace: true },
+    );
   };
 
   return [currentPriceFilter, setCurrentPriceFilter] as const;

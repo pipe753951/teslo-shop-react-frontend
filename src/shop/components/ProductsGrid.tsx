@@ -24,11 +24,14 @@ const ProductsGrid = function ({ products }: Props) {
     (searchParams.get("view-mode") as ViewMode) || "grid";
 
   const handleChangeViewMode = (newViewMode: ViewMode) => {
-    setSearchParams((prevSearchParams) => {
-      const newSearchParams = new URLSearchParams(prevSearchParams);
-      newSearchParams.set("view-mode", newViewMode);
-      return newSearchParams;
-    });
+    setSearchParams(
+      (prevSearchParams) => {
+        const newSearchParams = new URLSearchParams(prevSearchParams);
+        newSearchParams.set("view-mode", newViewMode);
+        return newSearchParams;
+      },
+      { replace: true },
+    );
   };
 
   return (

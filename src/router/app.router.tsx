@@ -83,6 +83,6 @@ export const appRouter = createBrowserRouter([
   //* If route isn't avaliable, redirect to home.
   {
     path: "*",
-    element: <Navigate to="/" />,
+    element: <Navigate to="/" replace />,
   },
 ]);

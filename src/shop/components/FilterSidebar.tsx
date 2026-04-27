@@ -25,19 +25,22 @@ const FilterSidebar = function ({ className }: Props) {
       ? currentSizes.filter((s) => s !== size)
       : [...currentSizes, size];
 
-    setSearchParams((prevSearchParams) => {
-      const newSearchParams = new URLSearchParams(prevSearchParams);
+    setSearchParams(
+      (prevSearchParams) => {
+        const newSearchParams = new URLSearchParams(prevSearchParams);
 
-      newSearchParams.set("page", "1");
+        newSearchParams.set("page", "1");
 
-      if (newSizes.length === 0) {
-        newSearchParams.delete("sizes");
-      } else {
-        newSearchParams.set("sizes", newSizes.join(","));
-      }
+        if (newSizes.length === 0) {
+          newSearchParams.delete("sizes");
+        } else {
+          newSearchParams.set("sizes", newSizes.join(","));
+        }
 
-      return newSearchParams;
-    });
+        return newSearchParams;
+      },
+      { replace: true },
+    );
   };
 
   const sizes = [
