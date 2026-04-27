@@ -1,18 +1,28 @@
-import React from "react";
+import React, {
+  type ForwardRefExoticComponent,
+  type RefAttributes,
+} from "react";
+import { Link, useLocation } from "react-router";
+
+import { cn } from "@/lib/utils";
+
 import {
   Home,
-  Users,
-  BarChart3,
-  Settings,
-  FileText,
   ShoppingCart,
-  Bell,
-  HelpCircle,
   ChevronLeft,
   ChevronRight,
+  type LucideProps,
 } from "lucide-react";
+
 import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
-import { cn } from "@/lib/utils";
+
+interface MenuItem {
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
+  label: string;
+  to: string;
+}
 
 interface SidebarProps {
   isCollapsed: boolean;
@@ -23,16 +33,15 @@ const AdminSidebar: React.FC<SidebarProps> = function ({
   isCollapsed,
   onToggle,
 }) {
-  const menuItems = [
-    { icon: Home, label: "Dashboard", active: true },
-    { icon: BarChart3, label: "Analytics" },
-    { icon: Users, label: "Users" },
-    { icon: ShoppingCart, label: "Orders" },
-    { icon: FileText, label: "Reports" },
-    { icon: Bell, label: "Notifications" },
-    { icon: Settings, label: "Settings" },
-    { icon: HelpCircle, label: "Help" },
+  const { pathname } = useLocation();
+
+  const menuItems: MenuItem[] = [
+    { icon: Home, label: "Panel administrativo", to: "/admin" },
+    { icon: ShoppingCart, label: "Productos", to: "/admin/products" },
   ];
+
+  // TODO: Ajustar función para que funcione con la pantalla de producto individual
+  const isActiveRoute = (to: string) => pathname === to;
 
   return (
     <div
@@ -63,10 +72,10 @@ const AdminSidebar: React.FC<SidebarProps> = function ({
             const Icon = item.icon;
             return (
               <li key={index}>
-                <a
-                  href="#"
+                <Link
+                  to={item.to}
                   className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-all duration-200 group ${
-                    item.active
+                    isActiveRoute(item.to)
                       ? "bg-blue-50 text-blue-600 border-r-2 border-blue-600"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                   }`}
@@ -75,7 +84,7 @@ const AdminSidebar: React.FC<SidebarProps> = function ({
                   {!isCollapsed && (
                     <span className="font-medium">{item.label}</span>
                   )}
-                </a>
+                </Link>
               </li>
             );
           })}
