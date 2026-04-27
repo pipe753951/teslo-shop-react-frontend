@@ -1,7 +1,4 @@
-import type { ComponentProps } from "react";
 import { Link } from "react-router";
-
-import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,9 +7,9 @@ import { Label } from "@/components/ui/label";
 
 import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
 
-const RegisterPage = function ({ className, ...props }: ComponentProps<"div">) {
+const RegisterPage = function () {
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8">
