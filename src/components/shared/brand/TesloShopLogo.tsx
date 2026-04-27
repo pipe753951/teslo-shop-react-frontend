@@ -11,13 +11,14 @@ const TesloShopLogo = function ({ className, subtitle = "Shop" }: Props) {
     <>
       <Link
         to="/"
-        className={cn("flex gap-3 items-center whitespace-nowrap", className)}
+        className={cn(
+          "flex font-montserrat-alternates gap-3 items-center whitespace-nowrap",
+          className,
+        )}
       >
-        <span className="font-montserrat-alternates text-2xl font-bold m-0 whitespace-nowrap">
-          Teslo
-        </span>
+        <span className="text-2xl font-bold m-0  whitespace-nowrap">Teslo</span>
         <div className="w-1 h-7 bg-foreground rounded-full"></div>
-        <span className="text-muted-foreground m-0 whitespace-nowrap">
+        <span className="text-muted-foreground font-normal m-0 whitespace-nowrap">
           {subtitle}
         </span>
       </Link>
