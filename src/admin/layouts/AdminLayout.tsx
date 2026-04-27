@@ -9,7 +9,7 @@ const AdminLayout = function () {
 
   return (
     <div>
-      <div className="min-h-screen bg-gray-50 flex">
+      <div className="bg-gray-50 flex">
         <AdminSidebar
           isCollapsed={sidebarCollapsed}
           onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
