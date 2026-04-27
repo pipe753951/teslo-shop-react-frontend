@@ -102,7 +102,7 @@ const ShopHeader = function () {
                 Inicia sesión
               </Button>
             </Link>
-            <Link to="/auth/login" className="flex">
+            <Link to="/admin" className="flex">
               <Button variant="destructive" size="sm">
                 Panel administrativo
               </Button>
