@@ -15,6 +15,8 @@ const useProducts = function () {
 
   const priceParam = searchParams.get("filter");
 
+  const query = searchParams.get("query") || undefined;
+
   const genderNames: Record<string, string> = {
     men: "men",
     women: "women",
@@ -53,7 +55,7 @@ const useProducts = function () {
     queryOptions({
       queryKey: [
         "products",
-        { limit, offset, sizes, gender, minPrice, maxPrice },
+        { limit, offset, sizes, gender, minPrice, maxPrice, query },
       ],
       queryFn: () =>
         getProducts({
@@ -63,6 +65,7 @@ const useProducts = function () {
           gender,
           minPrice,
           maxPrice,
+          query,
         }),
       staleTime: 300000, //* 1000ms * 60s * 5m
     }),
