@@ -11,13 +11,14 @@ const HomePage = function () {
   const { data } = useProducts();
 
   const [currentPage, setCurrentPage] = usePageNumberQuery();
+  console.debug(data);
 
   const handleUpdatePage = setCurrentPage;
 
   return (
     <>
       <ShopJumbotron title="Todos los productos" />
-      <ProductsGrid products={productsMock} />
+      <ProductsGrid products={data?.products} />
       <AppPagination
         totalPages={5}
         currentPage={currentPage}
