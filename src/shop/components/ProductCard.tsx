@@ -1,22 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
+import type { Product } from "@/types/interfaces/product.interface";
+
 interface Props {
-  name: string;
-  price: number;
-  image: string;
-  category: string;
+  product: Product;
 }
 
-const ProductCard = function (props: Props) {
-  const { name, price, image, category } = props;
+const ProductCard = function ({ product }: Props) {
   return (
     <Card className="group border-0 shadow-none product-card-hover cursor-pointer p-0">
       <CardContent className="p-0">
         <div className="relative aspect-square overflow-hidden bg-muted rounded-lg">
           <img
-            src={image}
-            alt={name}
+            src={product.images[0]}
+            alt={product.title}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="image-overlay" />
@@ -24,14 +22,17 @@ const ProductCard = function (props: Props) {
 
         <div className="pt-6 px-4 pb-4 space-y-3">
           <div className="space-y-1">
-            <h3 className="font-medium text-sm tracking-tight">{name}</h3>
+            <h3 className="font-medium text-sm tracking-tight">
+              {product.title}
+            </h3>
             <p className="text-xs text-muted-foreground uppercase">
-              {category}
+              <span>{product.tags} -&#32;</span>
+              <span className="font-bold">{product.sizes.join(", ")}</span>
             </p>
           </div>
 
           <div className="flex items-center justify-between">
-            <p className="font-semibold text-lg">${price}</p>
+            <p className="font-semibold text-lg">${product.price}</p>
             <Button
               size="sm"
               variant="outline"

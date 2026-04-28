@@ -1,5 +1,3 @@
-import { productsMock } from "@/mocks/products.mock";
-
 import useProducts from "@/shop/hooks/useProducts";
 import usePageNumberQuery from "@/shop/hooks/usePageNumberQuery";
 
@@ -11,7 +9,6 @@ const HomePage = function () {
   const { data } = useProducts();
 
   const [currentPage, setCurrentPage] = usePageNumberQuery();
-  console.debug(data);
 
   const handleUpdatePage = setCurrentPage;
 
@@ -20,7 +17,7 @@ const HomePage = function () {
       <ShopJumbotron title="Todos los productos" />
       <ProductsGrid products={data?.products} />
       <AppPagination
-        totalPages={5}
+        totalPages={data?.pages ?? 0}
         currentPage={currentPage}
         onUpdatePage={handleUpdatePage}
       />
