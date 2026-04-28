@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import useProductFilterQuery from "../hooks/useProductFilterQuery";
+import useProductFilterBySizeQuery from "../hooks/useProductFilterBySizeQuery";
 
 interface Props {
   className?: string;
@@ -16,7 +16,7 @@ const FilterSidebar = function ({ className }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const currentSizes: string[] = searchParams.get("sizes")?.split(",") || []; //* e.g. XS, S, M.
-  const [currentPrice, setCurrentPrice] = useProductFilterQuery();
+  const [currentPrice, setCurrentPrice] = useProductFilterBySizeQuery();
 
   const handlePriceChange = setCurrentPrice;
 
