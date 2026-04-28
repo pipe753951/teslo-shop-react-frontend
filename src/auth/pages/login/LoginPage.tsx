@@ -1,5 +1,5 @@
-import type { SubmitEvent } from "react";
-import { Link } from "react-router";
+import { useState, type SubmitEvent } from "react";
+import { Link, useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,17 +7,35 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
+import login from "@/auth/actions/login.action";
+import { toast } from "sonner";
 
 const LoginPage = function () {
+  const [isLoginIn, setIsLoginIn] = useState(false);
+  const navigate = useNavigate();
+
   const handleLogin = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
 
-    const email = formData.get("email");
-    const password = formData.get("password");
+    const email = formData.get("email")?.toString();
+    const password = formData.get("password")?.toString();
 
-    console.debug({ email, password });
+    if (!email || !password) return;
+
+    setIsLoginIn(true);
+
+    try {
+      const loginResponseData = await login(email, password);
+
+      localStorage.setItem("token", loginResponseData.token);
+      navigate("/");
+    } catch {
+      toast.error("Credenciales inválidas");
+    }
+
+    setIsLoginIn(false);
   };
 
   return (
@@ -63,7 +81,7 @@ const LoginPage = function () {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" disabled={isLoginIn} className="w-full">
                 Iniciar sesión
               </Button>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
