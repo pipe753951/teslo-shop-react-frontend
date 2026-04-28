@@ -14,7 +14,6 @@ const ProductsByGenderPage = function () {
   const { gender = "undefined" } = useParams();
 
   const genderLabels: Record<string, string> = {
-    undefined: "[género]",
     men: "hombres",
     women: "mujeres",
     kids: "niños",
