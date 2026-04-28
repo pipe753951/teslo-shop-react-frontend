@@ -8,20 +8,20 @@ const useProducts = function () {
   const [searchParams] = useSearchParams();
   const { gender: genderParam } = useParams();
 
+  const limit = Number(searchParams.get("limit") || 9);
+  const page = Number(searchParams.get("page") || 1);
+
+  const sizes = searchParams.get("sizes") || undefined;
+
+  const priceParam = searchParams.get("filter");
+
   const genderNames: Record<string, string> = {
     men: "men",
     women: "women",
     kids: "kid",
   };
 
-  const limit = Number(searchParams.get("limit") || 9);
-  const page = Number(searchParams.get("page") || 1);
-
-  const sizes = searchParams.get("sizes") || undefined;
-
   const gender = genderParam ? genderNames[genderParam] : undefined;
-
-  const priceParam = searchParams.get("filter");
 
   const offset = (page - 1) * limit;
 
