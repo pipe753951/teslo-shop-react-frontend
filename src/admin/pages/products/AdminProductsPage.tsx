@@ -22,13 +22,11 @@ const AdminProductsPage = function () {
 
   return (
     <div className="p-6">
-      <div className="flex gap-4">
-        <div className="flex-1">
-          <AdminPagePresentation
-            title="Tu lista de productos"
-            subtitle="Aquí podrás administrar tus productos que tus clientes podrán comprar en Teslo Shop."
-          />
-        </div>
+      <div className="flex justify-between gap-4">
+        <AdminPagePresentation
+          title="Tu lista de productos"
+          subtitle="Aquí podrás administrar tus productos que tus clientes podrán comprar en Teslo Shop."
+        />
         <Link to="/admin/products/new">
           <Button>
             <PlusIcon />
