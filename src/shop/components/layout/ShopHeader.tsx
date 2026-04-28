@@ -1,0 +1,118 @@
+import { useRef, type KeyboardEvent } from "react";
+import { Link, useParams, useSearchParams } from "react-router";
+
+import { cn } from "@/lib/utils";
+
+import { ChartArea, Search } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
+
+const ShopHeader = function () {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { gender } = useParams();
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const queryParam = searchParams.get("query");
+
+  const handleSearch = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "Enter") return;
+
+    const query = inputRef.current.value;
+
+    const newSearchParams = new URLSearchParams();
+    if (query) {
+      newSearchParams.set("query", query);
+    } else {
+      newSearchParams.delete("query");
+    }
+
+    setSearchParams(newSearchParams);
+  };
+
+  return (
+    <header className="sticky top-0 z-50 w-full border-b backdrop-blur bg-slate-50">
+      <div className="container flex items-center justify-between h-16 mx-auto px-4 gap-8 w-fit">
+        {/* Logo */}
+        <TesloShopLogo />
+
+        {/* Navigation - Desktop */}
+        <nav className="hidden lg:flex items-center space-x-8">
+          <Link
+            to="/"
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              !gender ? "underline underline-offset-8" : "",
+            )}
+          >
+            Inicio
+          </Link>
+          <Link
+            to="/gender/men"
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              gender === "men" ? "underline underline-offset-8" : "",
+            )}
+          >
+            Hombres
+          </Link>
+          <Link
+            to="/gender/women"
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              gender === "women" ? "underline underline-offset-8" : "",
+            )}
+          >
+            Mujeres
+          </Link>
+          <Link
+            to="/gender/kids"
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-primary",
+              gender === "kids" ? "underline underline-offset-8" : "",
+            )}
+          >
+            Niños
+          </Link>
+        </nav>
+
+        {/* Search and Account */}
+        <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center space-x-2">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                ref={inputRef}
+                placeholder="Buscar productos..."
+                defaultValue={queryParam}
+                className="pl-9 w-64 h-9 bg-background"
+                onKeyDown={handleSearch}
+              />
+            </div>
+          </div>
+
+          <Button variant="transparent" size="icon" className="md:hidden">
+            <Search className="h-5 w-5" />
+          </Button>
+
+          <Link to="/auth/login" className="flex">
+            <Button variant="default" size="sm">
+              Inicia sesión
+            </Button>
+          </Link>
+          <Link to="/admin" className="flex">
+            <Button variant="destructive" size="sm">
+              <span className="xl:hidden">
+                <ChartArea />
+              </span>
+              <span className="hidden xl:inline">Panel administrativo</span>
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default ShopHeader;
