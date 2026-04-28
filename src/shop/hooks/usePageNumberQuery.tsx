@@ -5,7 +5,9 @@ const usePageNumberQuery = function () {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    const evaluatingCurrentPageParam = parseInt(searchParams.get("page"));
+    const evaluatingCurrentPageParam = parseInt(
+      searchParams.get("page") || "NaN",
+    );
     if (!isNaN(evaluatingCurrentPageParam)) return;
 
     setSearchParams(
@@ -18,7 +20,7 @@ const usePageNumberQuery = function () {
     );
   }, [searchParams, setSearchParams]);
 
-  const currentPage = parseInt(searchParams.get("page"));
+  const currentPage = parseInt(searchParams.get("page") || "1");
 
   const setCurrentPage = (page: number) => {
     setSearchParams((prevSearchParams) => {
