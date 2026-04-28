@@ -1,0 +1,46 @@
+import { tesloApi, TESLO_API_BASE_URL } from "@/api/tesloApi";
+
+import type { Product } from "@/types/interfaces/product.interface";
+import type { ProductsResponse } from "@/types/interfaces/responses/products.response";
+
+interface Options {
+  limit?: number | string;
+  offset?: number | string;
+  sizes?: string;
+  gender?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  query?: string;
+}
+
+export const getProducts = async function (
+  options: Options = {},
+): Promise<ProductsResponse> {
+  const { limit, offset, sizes, gender, minPrice, maxPrice, query } = options;
+
+  const { data } = await tesloApi.get<ProductsResponse>("/products", {
+    params: {
+      limit,
+      offset,
+      sizes,
+      gender,
+      minPrice,
+      maxPrice,
+      q: query,
+    },
+  });
+
+  const productsWithImageURLs: Product[] = data.products.map((product) => ({
+    ...product,
+    images: product.images.map(
+      (image) => `${TESLO_API_BASE_URL}/files/product/${image}`,
+    ),
+  }));
+
+  return {
+    ...data,
+    products: productsWithImageURLs,
+  };
+};
+
+export default getProducts;

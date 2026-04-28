@@ -10,11 +10,12 @@ const ValidPriceFilter: PriceFilter[] = [
   "200-greater",
 ];
 
-const useProductFilterQuery = function () {
+const useProductFilterBySizeQuery = function () {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    const evaluatingCurrentProductPageParam = searchParams.get("filter");
+    const evaluatingCurrentProductPageParam =
+      searchParams.get("filter") || "not-valid";
     if (
       (ValidPriceFilter as string[]).includes(
         evaluatingCurrentProductPageParam,
@@ -34,7 +35,7 @@ const useProductFilterQuery = function () {
     );
   }, [searchParams, setSearchParams]);
 
-  const priceFilterQueryParam = searchParams.get("filter");
+  const priceFilterQueryParam = searchParams.get("filter") || "not-valid";
 
   const currentPriceFilter: PriceFilter = (
     ValidPriceFilter as string[]
@@ -56,4 +57,4 @@ const useProductFilterQuery = function () {
   return [currentPriceFilter, setCurrentPriceFilter] as const;
 };
 
-export default useProductFilterQuery;
+export default useProductFilterBySizeQuery;

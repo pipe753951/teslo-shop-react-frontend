@@ -5,7 +5,7 @@ import { Filter, Grid, List } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import type { Product } from "@/mocks/products.mock";
+import type { Product } from "@/types/interfaces/product.interface";
 
 import ProductCard from "./ProductCard";
 import FilterSidebar from "./FilterSidebar";
@@ -13,10 +13,10 @@ import FilterSidebar from "./FilterSidebar";
 type ViewMode = "grid" | "list";
 
 interface Props {
-  products: Product[];
+  products?: Product[];
 }
 
-const ProductsGrid = function ({ products }: Props) {
+const ProductsGrid = function ({ products = [] }: Props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showFilters, setShowFilters] = useState(false);
 
@@ -112,13 +112,7 @@ const ProductsGrid = function ({ products }: Props) {
               }
             >
               {products.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  name={product.name}
-                  price={product.price}
-                  image={product.image}
-                  category={product.category}
-                />
+                <ProductCard key={product.id} product={product} />
               ))}
             </div>
           </div>
