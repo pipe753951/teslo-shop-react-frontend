@@ -6,11 +6,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
-import login from "@/auth/actions/login.action";
 import { toast } from "sonner";
 
+import useAuthStore from "@/auth/store/auth.store";
+
+import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
+
 const LoginPage = function () {
+  const { login } = useAuthStore();
+
   const [isLoginIn, setIsLoginIn] = useState(false);
   const navigate = useNavigate();
 
@@ -26,15 +30,14 @@ const LoginPage = function () {
 
     setIsLoginIn(true);
 
-    try {
-      const loginResponseData = await login(email, password);
+    const isLoggedIn = await login(email, password);
 
-      localStorage.setItem("token", loginResponseData.token);
+    if (isLoggedIn) {
       navigate("/");
-    } catch {
-      toast.error("Credenciales inválidas");
+      return;
     }
 
+    toast.error("Credenciales inválidas");
     setIsLoginIn(false);
   };
 
