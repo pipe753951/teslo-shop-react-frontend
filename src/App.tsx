@@ -13,17 +13,18 @@ import { Toaster } from "sonner";
 
 import { appRouter } from "./router/app.router";
 
-import checkAuthAction from "./auth/actions/check-auth.action";
+import useAuthStore from "./auth/store/auth.store";
 
 import SplashScreen from "./components/shared/SplashScreen";
 
 const queryClient = new QueryClient();
 
 const CheckAuthProvider = function ({ children }: PropsWithChildren) {
+  const { checkAuthStatus } = useAuthStore();
   const { isLoading } = useQuery(
     queryOptions({
       queryKey: ["auth"],
-      queryFn: checkAuthAction,
+      queryFn: checkAuthStatus,
       staleTime: 300000, //* 1000ms * 60s * 5m
       retry: false,
       refetchInterval: 5400000, //* 1000ms * 60s * 60h * 1.5h
