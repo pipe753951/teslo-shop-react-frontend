@@ -11,6 +11,7 @@ interface AuthState {
   //* Computed values
   //* Actions
   login(email: string, password: string): Promise<boolean>;
+  logout(): void;
 }
 
 const useAuthStore = create<AuthState>()((set) => ({
@@ -28,10 +29,14 @@ const useAuthStore = create<AuthState>()((set) => ({
       set({ user: loginResponseData.user, token: loginResponseData.token });
       return true;
     } catch {
-      localStorage.removeItem("token");
-      set({ user: null, token: null });
+      this.logout();
       return false;
     }
+  },
+
+  logout() {
+    localStorage.removeItem("token");
+    set({ user: null, token: null });
   },
 }));
 
