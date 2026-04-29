@@ -6,7 +6,7 @@ const checkAuthAction = async function (): Promise<AuthResponse> {
   if (!token) throw new Error("No token found.");
 
   try {
-    const { data } = await tesloApi.get<AuthResponse>("/auth/ckeck-status");
+    const { data } = await tesloApi.get<AuthResponse>("/auth/check-status");
 
     return data;
   } catch {

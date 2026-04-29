@@ -1,12 +1,42 @@
+import type { PropsWithChildren } from "react";
 import { RouterProvider } from "react-router";
-import { appRouter } from "./router/app.router";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  queryOptions,
+  useQuery,
+} from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { Toaster } from "sonner";
 
+import { appRouter } from "./router/app.router";
+
+import checkAuthAction from "./auth/actions/check-auth.action";
+
+import SplashScreen from "./components/shared/SplashScreen";
+
 const queryClient = new QueryClient();
+
+const CheckAuthProvider = function ({ children }: PropsWithChildren) {
+  const { isLoading } = useQuery(
+    queryOptions({
+      queryKey: ["auth"],
+      queryFn: checkAuthAction,
+      staleTime: 300000, //* 1000ms * 60s * 5m
+      retry: false,
+      refetchInterval: 5400000, //* 1000ms * 60s * 60h * 1.5h
+      refetchOnWindowFocus: true,
+    }),
+  );
+
+  if (isLoading) {
+    return <SplashScreen />;
+  }
+
+  return children;
+};
 
 const App = function () {
   return (
@@ -14,7 +44,10 @@ const App = function () {
       <QueryClientProvider client={queryClient}>
         <Toaster />
         <ReactQueryDevtools initialIsOpen={false} />
-        <RouterProvider router={appRouter} />
+
+        <CheckAuthProvider>
+          <RouterProvider router={appRouter} />
+        </CheckAuthProvider>
       </QueryClientProvider>
     </div>
   );
