@@ -14,17 +14,24 @@ interface AuthState {
   authStatus: AuthStatus;
 
   //* Computed values
+  isAdmin(): boolean;
+
   //* Actions
   login(email: string, password: string): Promise<boolean>;
   logout(): void;
   checkAuthStatus(): Promise<boolean>;
 }
 
-const useAuthStore = create<AuthState>()((set) => ({
+const useAuthStore = create<AuthState>()((set, get) => ({
   //* Properties
   user: null,
   token: null,
   authStatus: "checking",
+
+  isAdmin() {
+    const userRoles = get().user?.roles || [];
+    return userRoles.includes("admin");
+  },
 
   //* Actions
   async login(email: string, password: string) {

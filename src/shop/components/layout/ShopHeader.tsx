@@ -3,7 +3,7 @@ import { Link, useParams, useSearchParams } from "react-router";
 
 import { cn } from "@/lib/utils";
 
-import { ChartArea, Search } from "lucide-react";
+import { ChartArea, LoaderCircle, Search } from "lucide-react";
 
 import useAuthStore from "@/auth/store/auth.store";
 
@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
 
 const ShopHeader = function () {
-  const { user, logout } = useAuthStore();
+  const { authStatus, isAdmin, logout } = useAuthStore();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const { gender } = useParams();
@@ -103,13 +103,13 @@ const ShopHeader = function () {
             <Search className="h-5 w-5" />
           </Button>
 
-          {user ? (
+          {authStatus === "authenticated" ? (
             <>
               <Button variant="outline" onClick={handleLogout} size="sm">
                 Cerrar sesión
               </Button>
 
-              {user!.roles.includes("admin") && (
+              {isAdmin() && (
                 <Link to="/admin" className="flex">
                   <Button variant="destructive" size="sm">
                     <span className="xl:hidden">
