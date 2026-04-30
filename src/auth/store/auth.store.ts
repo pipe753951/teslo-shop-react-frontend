@@ -47,7 +47,7 @@ const useAuthStore = create<AuthState>()((set, get) => ({
       });
       return true;
     } catch {
-      this.logout();
+      get().logout();
       return false;
     }
   },
@@ -63,7 +63,7 @@ const useAuthStore = create<AuthState>()((set, get) => ({
       set({ user, token, authStatus: "authenticated" });
       return true;
     } catch {
-      this.logout();
+      get().logout();
       return false;
     }
   },
