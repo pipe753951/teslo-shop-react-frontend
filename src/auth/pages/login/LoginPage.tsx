@@ -15,6 +15,7 @@ import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
 const LoginPage = function () {
   const { login } = useAuthStore();
 
+  // TODO: Rename to 'isLoggingIn' and 'setIsLoggingIn'.
   const [isLoginIn, setIsLoginIn] = useState(false);
   const navigate = useNavigate();
 

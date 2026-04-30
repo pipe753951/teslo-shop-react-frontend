@@ -1,18 +1,67 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import useAuthStore from "@/auth/store/auth.store";
+
 import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
+import { type SubmitEvent, useState } from "react";
+import { toast } from "sonner";
 
 const RegisterPage = function () {
+  const { register } = useAuthStore();
+
+  const [isRegistering, setIsRegisteringIn] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRegister = async (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+
+    const fullName = formData.get("fullName")?.toString();
+    const email = formData.get("email")?.toString();
+    const password = formData.get("password")?.toString();
+
+    if (!fullName || !email || !password) return;
+
+    setIsRegisteringIn(true);
+
+    const isRegisteredIn = await register({ fullName, email, password });
+
+    if (isRegisteredIn) {
+      toast.success("¡Bienvenido!, ahora puedes acceder a toda la tienda.");
+      navigate("/");
+      return;
+    }
+
+    toast.error("Hubo un error en el registro.", {
+      description: (
+        <div>
+          <p>Recuerda que:</p>
+          <ul className="list-disc list-inside">
+            <li>Debes proporcionar un correo elecrónico válido.</li>
+            <li>
+              La contraseña debe tener al menos, una letra mayúscula, una
+              minúscula y un número.
+            </li>
+            <li>La contraseña además debe tener 6 carácteres o más.</li>
+          </ul>
+        </div>
+      ),
+    });
+
+    setIsRegisteringIn(false);
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8" onSubmit={handleRegister}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col">
                 <TesloShopLogo className="mb-2" />
@@ -27,6 +76,7 @@ const RegisterPage = function () {
                 <Label htmlFor="fullName">Nombre Completo</Label>
                 <Input
                   id="fullName"
+                  name="fullName"
                   type="text"
                   placeholder="Juan Pérez"
                   required
@@ -36,6 +86,7 @@ const RegisterPage = function () {
                 <Label htmlFor="email">Correo</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="usuario@tesloshop.com"
                   required
@@ -45,6 +96,7 @@ const RegisterPage = function () {
                 <Label htmlFor="password">Contraseña</Label>
                 <Input
                   id="password"
+                  name="password"
                   type="password"
                   placeholder="Contraseña..."
                   required
