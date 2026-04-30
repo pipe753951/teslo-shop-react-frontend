@@ -39,7 +39,6 @@ const useAuthStore = create<AuthState>()((set, get) => ({
 
   //* Actions
   async login(email: string, password: string) {
-    console.debug({ email, password });
     try {
       const loginResponseData = await login(email, password);
       localStorage.setItem("token", loginResponseData.token);

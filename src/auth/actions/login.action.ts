@@ -11,8 +11,6 @@ const login = async function (
       password,
     });
 
-    console.debug({ data });
-
     return data;
   } catch (error) {
     console.error(`Something was unexpected: ${error}`);

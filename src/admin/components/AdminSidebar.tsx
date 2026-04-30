@@ -46,7 +46,6 @@ const AdminSidebar: React.FC<SidebarProps> = function ({
     { icon: ShoppingCart, label: "Productos", to: "/admin/products" },
   ];
 
-  // TODO: Ajustar función para que funcione con la pantalla de producto individual
   const isActiveRoute = (to: string) => {
     if (pathname.startsWith("/admin/products/") && to == "/admin/products") {
       return true;
