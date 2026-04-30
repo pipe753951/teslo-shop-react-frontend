@@ -14,6 +14,11 @@ import {
   type LucideProps,
 } from "lucide-react";
 
+import getUsernameInitials from "@/lib/app_helpers/getUsernameInitials.helper";
+
+import useAuthStore from "@/auth/store/auth.store";
+
+import UserProfileCircle from "@/components/shared/UserProfileCircle";
 import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
 
 interface MenuItem {
@@ -33,6 +38,7 @@ const AdminSidebar: React.FC<SidebarProps> = function ({
   isCollapsed,
   onToggle,
 }) {
+  const { user } = useAuthStore();
   const { pathname } = useLocation();
 
   const menuItems: MenuItem[] = [
@@ -40,7 +46,6 @@ const AdminSidebar: React.FC<SidebarProps> = function ({
     { icon: ShoppingCart, label: "Productos", to: "/admin/products" },
   ];
 
-  // TODO: Ajustar función para que funcione con la pantalla de producto individual
   const isActiveRoute = (to: string) => {
     if (pathname.startsWith("/admin/products/") && to == "/admin/products") {
       return true;
@@ -99,16 +104,16 @@ const AdminSidebar: React.FC<SidebarProps> = function ({
 
       {/* User Profile */}
       {!isCollapsed && (
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-g ray-200">
           <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
-            <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
-              JD
-            </div>
+            <UserProfileCircle
+              usernameInitials={getUsernameInitials(user!.fullName)}
+            />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-900 truncate">
-                John Doe
+                {user!.fullName}
               </p>
-              <p className="text-xs text-gray-500 truncate">john@company.com</p>
+              <p className="text-xs text-gray-500 truncate">{user!.email}</p>
             </div>
           </div>
         </div>

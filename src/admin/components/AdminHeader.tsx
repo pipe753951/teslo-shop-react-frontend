@@ -1,7 +1,16 @@
 import React from "react";
+
 import { Search, Bell, MessageSquare, Settings } from "lucide-react";
 
+import useAuthStore from "@/auth/store/auth.store";
+
+import getUsernameInitials from "@/lib/app_helpers/getUsernameInitials.helper";
+
+import UserProfileCircle from "@/components/shared/UserProfileCircle";
+
 const AdminHeader: React.FC = function () {
+  const { user } = useAuthStore();
+
   return (
     <header className="h-18 px-6 flex items-center justify-between bg-white border-b border-gray-200">
       {/* Search */}
@@ -34,9 +43,10 @@ const AdminHeader: React.FC = function () {
           <Settings size={20} />
         </button>
 
-        <div className="w-8 h-8 bg-linear-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold text-sm cursor-pointer hover:shadow-lg transition-shadow">
-          JD
-        </div>
+        <UserProfileCircle
+          usernameInitials={getUsernameInitials(user!.fullName)}
+          className="size-8 text-sm"
+        />
       </div>
     </header>
   );

@@ -1,18 +1,51 @@
-import { Link } from "react-router";
+import { useState, type SubmitEvent } from "react";
+import { Link, useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { toast } from "sonner";
+
+import useAuthStore from "@/auth/store/auth.store";
+
 import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
 
 const LoginPage = function () {
+  const { login } = useAuthStore();
+
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = async (event: SubmitEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+
+    const email = formData.get("email")?.toString();
+    const password = formData.get("password")?.toString();
+
+    if (!email || !password) return;
+
+    setIsLoggingIn(true);
+
+    const isLoggedIn = await login(email, password);
+
+    if (isLoggedIn) {
+      navigate("/");
+      return;
+    }
+
+    toast.error("Credenciales inválidas");
+    setIsLoggingIn(false);
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8">
+          <form className="p-6 md:p-8" onSubmit={handleLogin}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col">
                 <TesloShopLogo className="mb-2" />
@@ -28,6 +61,7 @@ const LoginPage = function () {
                 <Input
                   id="email"
                   type="email"
+                  name="email"
                   placeholder="usuario@tesloshop.com"
                   required
                 />
@@ -45,11 +79,12 @@ const LoginPage = function () {
                 <Input
                   id="password"
                   type="password"
+                  name="password"
                   placeholder="Contraseña..."
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" disabled={isLoggingIn} className="w-full">
                 Iniciar sesión
               </Button>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">

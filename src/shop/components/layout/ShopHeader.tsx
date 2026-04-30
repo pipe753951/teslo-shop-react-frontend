@@ -3,23 +3,30 @@ import { Link, useParams, useSearchParams } from "react-router";
 
 import { cn } from "@/lib/utils";
 
-import { ChartArea, Search } from "lucide-react";
+import { ChartArea, LoaderCircle, Search } from "lucide-react";
+
+import useAuthStore from "@/auth/store/auth.store";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
 import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
 
 const ShopHeader = function () {
+  const { authStatus, isAdmin, logout } = useAuthStore();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const { gender } = useParams();
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const queryParam = searchParams.get("query");
+  const queryParam = searchParams.get("query") ?? undefined;
+
+  const handleLogout = logout;
 
   const handleSearch = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== "Enter") return;
 
-    const query = inputRef.current.value;
+    const query = inputRef.current?.value;
 
     const newSearchParams = new URLSearchParams();
     if (query) {
@@ -96,19 +103,32 @@ const ShopHeader = function () {
             <Search className="h-5 w-5" />
           </Button>
 
-          <Link to="/auth/login" className="flex">
-            <Button variant="default" size="sm">
-              Inicia sesión
-            </Button>
-          </Link>
-          <Link to="/admin" className="flex">
-            <Button variant="destructive" size="sm">
-              <span className="xl:hidden">
-                <ChartArea />
-              </span>
-              <span className="hidden xl:inline">Panel administrativo</span>
-            </Button>
-          </Link>
+          {authStatus === "authenticated" ? (
+            <>
+              <Button variant="outline" onClick={handleLogout} size="sm">
+                Cerrar sesión
+              </Button>
+
+              {isAdmin() && (
+                <Link to="/admin" className="flex">
+                  <Button variant="destructive" size="sm">
+                    <span className="xl:hidden">
+                      <ChartArea />
+                    </span>
+                    <span className="hidden xl:inline">
+                      Panel administrativo
+                    </span>
+                  </Button>
+                </Link>
+              )}
+            </>
+          ) : (
+            <Link to="/auth/login" className="flex">
+              <Button variant="default" size="sm">
+                Inicia sesión
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>
