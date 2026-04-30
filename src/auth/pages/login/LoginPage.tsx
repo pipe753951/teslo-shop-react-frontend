@@ -15,8 +15,7 @@ import TesloShopLogo from "@/components/shared/brand/TesloShopLogo";
 const LoginPage = function () {
   const { login } = useAuthStore();
 
-  // TODO: Rename to 'isLoggingIn' and 'setIsLoggingIn'.
-  const [isLoginIn, setIsLoginIn] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -29,7 +28,7 @@ const LoginPage = function () {
 
     if (!email || !password) return;
 
-    setIsLoginIn(true);
+    setIsLoggingIn(true);
 
     const isLoggedIn = await login(email, password);
 
@@ -39,7 +38,7 @@ const LoginPage = function () {
     }
 
     toast.error("Credenciales inválidas");
-    setIsLoginIn(false);
+    setIsLoggingIn(false);
   };
 
   return (
@@ -85,7 +84,7 @@ const LoginPage = function () {
                   required
                 />
               </div>
-              <Button type="submit" disabled={isLoginIn} className="w-full">
+              <Button type="submit" disabled={isLoggingIn} className="w-full">
                 Iniciar sesión
               </Button>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
