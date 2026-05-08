@@ -13,7 +13,9 @@ import {
 import AdminPagePresentation from "@/admin/components/AdminPagePresentation";
 import AppPagination from "@/components/shared/AppPagination";
 import usePageNumberQuery from "@/shop/hooks/usePageNumberQuery";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Field, FieldLabel } from "@/components/ui/field";
 
 const AdminProductsPage = function () {
   const [currentPage, setCurrentPage] = usePageNumberQuery();
@@ -34,6 +36,34 @@ const AdminProductsPage = function () {
           </Button>
         </Link>
       </div>
+
+      <form action="#" className="mb-4">
+        {/* Search */}
+        <div className="flex items-center gap-4">
+          <Field orientation="horizontal">
+            <FieldLabel htmlFor="search" className="text-lg">
+              Buscar productos
+            </FieldLabel>
+            <div className="relative">
+              <Search
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={20}
+              />
+              <Input
+                type="search"
+                name="Buscar productos"
+                id="search"
+                placeholder="Busca aquí..."
+                className="h-11 pl-10 pr-4 py-2 bg-background border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              />
+            </div>
+          </Field>
+
+          <Button size="lg">
+            <span>Buscar</span>
+          </Button>
+        </div>
+      </form>
 
       <Table className="mb-10 p-10 bg-background shadow-xs border border-gray-200">
         <TableHeader>
