@@ -4,7 +4,7 @@ import { Search, Bell, MessageSquare, Settings } from "lucide-react";
 
 import useAuthStore from "@/auth/store/auth.store";
 
-import getUsernameInitials from "@/lib/app_helpers/getUsernameInitials.helper";
+import formatUsernameInitials from "@/lib/app_helpers/formatUsernameInitials.helper.formatter";
 
 import UserProfileCircle from "@/components/shared/UserProfileCircle";
 
@@ -29,7 +29,7 @@ const AdminHeader: React.FC = function () {
         </button>
 
         <UserProfileCircle
-          usernameInitials={getUsernameInitials(user!.fullName)}
+          usernameInitials={formatUsernameInitials(user!.fullName)}
           className="size-8 text-sm"
         />
       </div>
