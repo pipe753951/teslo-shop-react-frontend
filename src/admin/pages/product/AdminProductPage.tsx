@@ -8,6 +8,7 @@ import { Plus, SaveAll, Tag, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import AdminPagePresentation from "@/admin/components/AdminPagePresentation";
+import useProduct from "@/shop/hooks/useProduct";
 
 interface Product {
   id: string;
@@ -24,6 +25,9 @@ interface Product {
 
 const AdminProductPage = function () {
   const { id } = useParams();
+
+  const { isLoading, isError, data } = useProduct(id || "");
+  console.debug({ isLoading, isError, data });
 
   const productTitle = id === "new" ? "Nuevo producto" : "Editar producto";
   const productSubtitle =
