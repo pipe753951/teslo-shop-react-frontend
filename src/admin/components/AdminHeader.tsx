@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Search, Bell, MessageSquare, Settings } from "lucide-react";
+import { Bell, MessageSquare, Settings } from "lucide-react";
 
 import useAuthStore from "@/auth/store/auth.store";
 
