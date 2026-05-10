@@ -2,10 +2,10 @@
 
 import { Navigate, useParams } from "react-router";
 
-import { Loader2 } from "lucide-react";
-
 import useProduct from "@/shop/hooks/useProduct";
 import AdminProductForm from "./ui/AdminProductForm";
+
+import LoadingPlaceholder from "@/components/shared/LoadingPlaceholder";
 
 const AdminProductPage = function () {
   const { id } = useParams();
@@ -22,11 +22,7 @@ const AdminProductPage = function () {
     return <Navigate to="/admin/products" />;
   }
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <Loader2 className="size-12 animate-spin" />
-      </div>
-    );
+    return <LoadingPlaceholder />;
   }
   if (!product) {
     return <Navigate to="/admin/products" />;
