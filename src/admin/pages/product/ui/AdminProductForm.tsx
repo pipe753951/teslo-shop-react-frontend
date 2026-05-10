@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import type { Product } from "@/types/interfaces/product.interface";
 
 import AdminPagePresentation from "@/admin/components/AdminPagePresentation";
+import { cn } from "@/lib/utils";
 
 interface Props {
   title: string;
@@ -21,7 +22,11 @@ const availableProductSizes = ["XS", "S", "M", "L", "XL", "XXL"];
 
 const AdminProductForm = function ({ title, subtitle, product }: Props) {
   const [dragActive, setDragActive] = useState(false);
-  const { register } = useForm({
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = useForm({
     defaultValues: product,
   });
 
@@ -80,8 +85,13 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
     console.log(files);
   };
 
+  // TODO: Eliminar en un futuro.
+  const handleValidatedSubmit = (productLike: Product) => {
+    console.debug("handleValidatedSubmit", { productLike });
+  };
+
   return (
-    <div className="p-6">
+    <form onSubmit={handleSubmit(handleValidatedSubmit)} className="p-6">
       <div className="flex justify-between gap-4">
         <AdminPagePresentation title={title} subtitle={subtitle} />
         <div className="flex justify-end mb-10 gap-4">
@@ -118,10 +128,20 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
                     type="text"
                     // value={product.title}
                     // onChange={(e) => handleInputChange("title", e.target.value)}
-                    {...register("title")}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    {...register("title", {
+                      required: true,
+                    })}
+                    className={cn(
+                      "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200",
+                      { "border-2 border-destructive": errors.title },
+                    )}
                     placeholder="Título del producto"
                   />
+                  {errors.title && (
+                    <p className="text-destructive text-sm font-semibold mt-2">
+                      Hubo un error en la validación.
+                    </p>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -427,7 +447,7 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
 
