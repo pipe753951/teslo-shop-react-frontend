@@ -13,8 +13,12 @@ const useProduct = function (idOrSlug: string): UseQueryResult<Product, Error> {
     queryOptions({
       queryKey: ["product", { idOrSlug }],
       queryFn: () => getProductByIdOrSlug(idOrSlug),
+      staleTime: 300000, //* 1000ms * 60s * 5m
+      // enabled: Boolean(idOrSlug),
     }),
   );
+
+  // TODO: Mutador
 
   return queryResult;
 };
