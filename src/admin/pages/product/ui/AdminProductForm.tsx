@@ -71,7 +71,13 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
     // }
   };
 
-  const removeSize = (sizeToRemove: string) => {
+  const removeSize = (size: ProductSize) => {
+    const sizeSet = new Set(getValues("sizes"));
+    sizeSet.delete(size);
+    setValue("sizes", Array.from(sizeSet));
+
+    console.debug(sizeSet);
+
     // setProduct((prev) => ({
     //   ...prev,
     //   sizes: prev.sizes.filter((size) => size !== sizeToRemove),
@@ -296,8 +302,8 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
                       >
                         {size}
                         <button
-                          // onClick={() => removeSize(size)}
-                          className="ml-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                          onClick={() => removeSize(size)}
+                          className="ml-2 text-blue-600 cursor-pointer hover:text-blue-800 transition-colors duration-200"
                         >
                           <X className="h-3 w-3" />
                         </button>
