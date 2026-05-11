@@ -8,7 +8,7 @@ import {
 
 import type { Product } from "@/types/interfaces/product.interface";
 
-import getProductByIdOrSlug from "@/shop/actions/get-product-by-id-or-slug";
+import getProductByIdOrSlug from "@/shop/actions/get-product-by-id-or-slug.action";
 import createOrUpdateProduct from "@/admin/actions/create-or-update-product.action";
 
 interface useProductState {
@@ -20,7 +20,7 @@ const useProduct = function (idOrSlug: string): useProductState {
   const queryResult = useQuery(
     queryOptions({
       queryKey: ["product", { idOrSlug }],
-      queryFn: () => getProductByIdOrSlug(idOrSlug),
+      queryFn: () => getProductByIdOrSlug(idOrSlug, true),
       staleTime: 300000, //* 1000ms * 60s * 5m
       // enabled: Boolean(idOrSlug),
     }),
