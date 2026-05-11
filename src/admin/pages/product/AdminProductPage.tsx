@@ -20,6 +20,8 @@ const AdminProductPage = function () {
     mutationResult,
   } = useProduct(id || "", { allowNewProduct: true });
 
+  const isCreatingProduct = product?.id === "new";
+
   const formTitle = id === "new" ? "Nuevo producto" : "Editar producto";
   const formSubtitle =
     id === "new"
@@ -31,7 +33,9 @@ const AdminProductPage = function () {
 
     await mutationResult.mutateAsync(productLike, {
       onSuccess(productMutationResultData) {
-        toast.success("El producto se actualizó exitosamente.");
+        toast.success(
+          `El producto se ${isCreatingProduct ? "creó" : "actualizó"} exitosamente.`,
+        );
         navigate(`/admin/products/${productMutationResultData.id}`);
       },
       onError(error) {
