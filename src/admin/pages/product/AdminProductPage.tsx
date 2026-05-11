@@ -10,7 +10,10 @@ import LoadingPlaceholder from "@/components/shared/LoadingPlaceholder";
 const AdminProductPage = function () {
   const { id } = useParams();
 
-  const { isLoading, isError, data: product } = useProduct(id || "");
+  const {
+    queryResult: { isLoading, isError, data: product },
+    handleSubmitProductForm,
+  } = useProduct(id || "");
 
   const formTitle = id === "new" ? "Nuevo producto" : "Editar producto";
   const formSubtitle =
@@ -33,6 +36,7 @@ const AdminProductPage = function () {
       title={formTitle}
       subtitle={formSubtitle}
       product={product}
+      onSubmit={handleSubmitProductForm}
     />
   );
 };

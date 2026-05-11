@@ -20,11 +20,14 @@ interface Props {
   title: string;
   subtitle: string;
   product: Product;
+
+  onSubmit(productLike: Partial<Product>): Promise<void>;
 }
 
 const availableProductSizes: ProductSize[] = ["XS", "S", "M", "L", "XL", "XXL"];
 
-const AdminProductForm = function ({ title, subtitle, product }: Props) {
+const AdminProductForm = function (props: Props) {
+  const { title, subtitle, product, onSubmit } = props;
   const [dragActive, setDragActive] = useState(false);
   const tagInputRef = useRef<null | HTMLInputElement>(null);
 
@@ -140,13 +143,8 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
     console.log(files);
   };
 
-  // TODO: Eliminar en un futuro.
-  const handleValidatedSubmit = (productLike: Product) => {
-    console.debug("handleValidatedSubmit", { productLike });
-  };
-
   return (
-    <form onSubmit={handleSubmit(handleValidatedSubmit)} className="p-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="p-6">
       <div className="flex justify-between gap-4">
         <AdminPagePresentation title={title} subtitle={subtitle} />
         <div className="flex justify-end mb-10 gap-4">

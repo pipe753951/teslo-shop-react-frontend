@@ -8,7 +8,12 @@ import type { Product } from "@/types/interfaces/product.interface";
 
 import getProductByIdOrSlug from "../actions/get-product-by-id-or-slug";
 
-const useProduct = function (idOrSlug: string): UseQueryResult<Product, Error> {
+interface useProductState {
+  queryResult: UseQueryResult<Product, Error>;
+  handleSubmitProductForm(productLike: Partial<Product>): Promise<void>;
+}
+
+const useProduct = function (idOrSlug: string): useProductState {
   const queryResult = useQuery(
     queryOptions({
       queryKey: ["product", { idOrSlug }],
@@ -20,7 +25,11 @@ const useProduct = function (idOrSlug: string): UseQueryResult<Product, Error> {
 
   // TODO: Mutador
 
-  return queryResult;
+  const handleSubmitProductForm = async (productLike: Partial<Product>) => {
+    console.debug(productLike);
+  };
+
+  return { queryResult, handleSubmitProductForm };
 };
 
 export default useProduct;
