@@ -1,18 +1,23 @@
-// https://github.com/Klerith/bolt-product-editor
+// Code based on: https://github.com/Klerith/bolt-product-editor
 
-import { Navigate, useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router";
+
+import { toast } from "sonner";
+
+import type { Product } from "@/types/interfaces/product.interface";
 
 import useProduct from "@/shop/hooks/useProduct";
-import AdminProductForm from "./ui/AdminProductForm";
 
+import AdminProductForm from "./ui/AdminProductForm";
 import LoadingPlaceholder from "@/components/shared/LoadingPlaceholder";
 
 const AdminProductPage = function () {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const {
     queryResult: { isLoading, isError, data: product },
-    handleSubmitProductForm,
+    mutationResult,
   } = useProduct(id || "");
 
   const formTitle = id === "new" ? "Nuevo producto" : "Editar producto";
@@ -20,6 +25,22 @@ const AdminProductPage = function () {
     id === "new"
       ? "Aquí puedes crear un nuevo producto."
       : "Aquí puedes editar el producto.";
+
+  const handleSubmitProductForm = async (productLike: Partial<Product>) => {
+    await mutationResult.mutateAsync(productLike, {
+      onSuccess(productMutationResultData) {
+        toast.success("El producto se actualizó exitosamente.");
+        navigate(`/admin/products/${productMutationResultData.id}`);
+      },
+      onError(error) {
+        console.error(
+          `Something was unexpected when submitting a product:`,
+          error,
+        );
+        toast.error("Hubo un error al actualizar un producto");
+      },
+    });
+  };
 
   if (isError) {
     return <Navigate to="/admin/products" />;

@@ -1,16 +1,19 @@
 import {
   queryOptions,
+  useMutation,
   useQuery,
+  type UseMutationResult,
   type UseQueryResult,
 } from "@tanstack/react-query";
 
 import type { Product } from "@/types/interfaces/product.interface";
 
-import getProductByIdOrSlug from "../actions/get-product-by-id-or-slug";
+import getProductByIdOrSlug from "@/shop/actions/get-product-by-id-or-slug";
+import createOrUpdateProduct from "@/admin/actions/create-or-update-product.action";
 
 interface useProductState {
   queryResult: UseQueryResult<Product, Error>;
-  handleSubmitProductForm(productLike: Partial<Product>): Promise<void>;
+  mutationResult: UseMutationResult<Product, Error, Partial<Product>, unknown>;
 }
 
 const useProduct = function (idOrSlug: string): useProductState {
@@ -23,13 +26,18 @@ const useProduct = function (idOrSlug: string): useProductState {
     }),
   );
 
-  // TODO: Mutador
+  const mutationResult = useMutation({
+    mutationFn: createOrUpdateProduct,
+    onSuccess(productData: Product) {
+      console.info("Todo salió bien", { productData });
 
-  const handleSubmitProductForm = async (productLike: Partial<Product>) => {
-    console.debug(productLike);
-  };
+      // TODO:
+      // Invalidar caché.
+      // Actualizar queryData,
+    },
+  });
 
-  return { queryResult, handleSubmitProductForm };
+  return { queryResult, mutationResult };
 };
 
 export default useProduct;
