@@ -2,9 +2,13 @@ import { TESLO_API_BASE_URL, tesloApi } from "@/api/tesloApi";
 
 import type { Product } from "@/types/interfaces/product.interface";
 
+interface GetProductByIdOrSlugOptions {
+  allowNewProduct?: boolean;
+}
+
 const getProductByIdOrSlug = async function (
   idOrSlug: string,
-  allowNewProduct?: boolean,
+  { allowNewProduct }: GetProductByIdOrSlugOptions,
 ): Promise<Product> {
   if (!idOrSlug) {
     throw new Error(
