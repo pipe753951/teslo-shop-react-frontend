@@ -27,6 +27,8 @@ const AdminProductPage = function () {
       : "Aquí puedes editar el producto.";
 
   const handleSubmitProductForm = async (productLike: Partial<Product>) => {
+    if (mutationResult.isPending) return;
+
     await mutationResult.mutateAsync(productLike, {
       onSuccess(productMutationResultData) {
         toast.success("El producto se actualizó exitosamente.");
@@ -57,6 +59,7 @@ const AdminProductPage = function () {
       title={formTitle}
       subtitle={formSubtitle}
       product={product}
+      isSubmitting={mutationResult.isPending}
       onSubmit={handleSubmitProductForm}
     />
   );

@@ -21,13 +21,15 @@ interface Props {
   subtitle: string;
   product: Product;
 
+  isSubmitting: boolean;
+
   onSubmit(productLike: Partial<Product>): Promise<void>;
 }
 
 const availableProductSizes: ProductSize[] = ["XS", "S", "M", "L", "XL", "XXL"];
 
 const AdminProductForm = function (props: Props) {
-  const { title, subtitle, product, onSubmit } = props;
+  const { title, subtitle, product, isSubmitting, onSubmit } = props;
   const [dragActive, setDragActive] = useState(false);
   const tagInputRef = useRef<null | HTMLInputElement>(null);
 
@@ -155,7 +157,7 @@ const AdminProductForm = function (props: Props) {
             </Link>
           </Button>
 
-          <Button>
+          <Button disabled={isSubmitting}>
             <SaveAll className="w-4 h-4" />
             Guardar cambios
           </Button>
