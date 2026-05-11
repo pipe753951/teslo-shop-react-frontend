@@ -9,8 +9,9 @@ import { Button } from "@/components/ui/button";
 
 import type { Product } from "@/types/interfaces/product.interface";
 
+import AdminFormInput from "@/admin/components/form/AdminFormInput";
 import AdminPagePresentation from "@/admin/components/AdminPagePresentation";
-import { cn } from "@/lib/utils";
+import AdminFormTextarea from "@/admin/components/form/AdminFormTextarea";
 
 interface Props {
   title: string;
@@ -122,24 +123,25 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Título del producto
+                    Título / Nombre del producto
                   </label>
-                  <input
+                  <AdminFormInput
                     type="text"
                     // value={product.title}
                     // onChange={(e) => handleInputChange("title", e.target.value)}
                     {...register("title", {
                       required: true,
                     })}
-                    className={cn(
-                      "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200",
-                      { "border-2 border-destructive": errors.title },
-                    )}
+                    // className={cn(
+                    //   "w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200",
+                    //   { "border-2 border-destructive": errors.title },
+                    // )}
+                    className={errors.title && "border-2 border-destructive"}
                     placeholder="Título del producto"
                   />
                   {errors.title && (
                     <p className="text-destructive text-sm font-semibold mt-2">
-                      Hubo un error en la validación.
+                      Debes proporcionar un título / nombre al producto.
                     </p>
                   )}
                 </div>
@@ -149,32 +151,42 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       Precio ($)
                     </label>
-                    <input
+                    <AdminFormInput
                       type="number"
                       // value={product.price}
                       // onChange={(e) =>
                       //   handleInputChange("price", parseFloat(e.target.value))
                       // }
-                      {...register("price")}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                      {...register("price", { required: true, min: 1 })}
+                      className={errors.price && "border-2 border-destructive"}
                       placeholder="Precio del producto"
                     />
+                    {errors.price && (
+                      <p className="text-destructive text-sm font-semibold mt-2">
+                        Debes indicar el precio.
+                      </p>
+                    )}
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Stock del producto
+                      Unidades del producto
                     </label>
-                    <input
+                    <AdminFormInput
                       type="number"
                       // value={product.stock}
                       // onChange={(e) =>
                       //   handleInputChange("stock", parseInt(e.target.value))
                       // }
-                      {...register("stock")}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                      placeholder="Stock del producto"
+                      {...register("stock", { required: true, min: 1 })}
+                      className={errors.stock && "border-2 border-destructive"}
+                      placeholder="Unidades del producto"
                     />
+                    {errors.stock && (
+                      <p className="text-destructive text-sm font-semibold mt-2">
+                        Debes especificar las unidades.
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -182,14 +194,28 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
                   <label className="block text-sm font-medium text-slate-700 mb-2">
                     Slug del producto
                   </label>
-                  <input
+                  <AdminFormInput
                     type="text"
                     // value={product.slug}
                     // onChange={(e) => handleInputChange("slug", e.target.value)}
-                    {...register("slug")}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    {...register("slug", {
+                      required: true,
+                      validate: (value) => {
+                        return (
+                          !/\s/.test(value) ||
+                          "El slug no puede contener espacios en blanco."
+                        );
+                      },
+                    })}
+                    className={errors.stock && "border-2 border-destructive"}
                     placeholder="Slug del producto"
                   />
+                  {errors.slug && (
+                    <p className="text-destructive text-sm font-semibold mt-2">
+                      {errors.slug.message ||
+                        "Necesitas indicar un slug, un nombre para diferenciar el producto desde una URL de la app."}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -215,16 +241,23 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
                   <label className="block text-sm font-medium text-slate-700 mb-2">
                     Descripción del producto
                   </label>
-                  <textarea
+                  <AdminFormTextarea
                     // value={product.description}
                     // onChange={(e) =>
                     // handleInputChange("description", e.target.value)
                     // }
-                    {...register("description")}
+                    {...register("description", { required: true })}
                     rows={5}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
+                    className={
+                      errors.description && "border-2 border-destructive"
+                    }
                     placeholder="Descripción del producto"
                   />
+                  {errors.description && (
+                    <p className="text-destructive text-sm font-semibold mt-2">
+                      Debes suministrar la descripción.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
