@@ -36,6 +36,7 @@ const AdminProductPage = function () {
         toast.success(
           `El producto se ${isCreatingProduct ? "creó" : "actualizó"} exitosamente.`,
         );
+        if (!isCreatingProduct) return;
         navigate(`/admin/products/${productMutationResultData.id}`);
       },
       onError(error) {
