@@ -11,16 +11,23 @@ import type { Product } from "@/types/interfaces/product.interface";
 import getProductByIdOrSlug from "@/shop/actions/get-product-by-id-or-slug.action";
 import createOrUpdateProduct from "@/admin/actions/create-or-update-product.action";
 
-interface useProductState {
+interface UseProductOptions {
+  allowNewProduct?: boolean;
+}
+
+interface UseProductState {
   queryResult: UseQueryResult<Product, Error>;
   mutationResult: UseMutationResult<Product, Error, Partial<Product>, unknown>;
 }
 
-const useProduct = function (idOrSlug: string): useProductState {
+const useProduct = function (
+  idOrSlug: string,
+  { allowNewProduct }: UseProductOptions = { allowNewProduct: false },
+): UseProductState {
   const queryResult = useQuery(
     queryOptions({
-      queryKey: ["product", { idOrSlug }],
-      queryFn: () => getProductByIdOrSlug(idOrSlug, true),
+      queryKey: ["product", { idOrSlug, allowNewProduct }],
+      queryFn: () => getProductByIdOrSlug(idOrSlug, { allowNewProduct }),
       staleTime: 300000, //* 1000ms * 60s * 5m
       // enabled: Boolean(idOrSlug),
     }),

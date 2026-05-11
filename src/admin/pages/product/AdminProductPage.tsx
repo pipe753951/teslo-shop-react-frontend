@@ -18,7 +18,7 @@ const AdminProductPage = function () {
   const {
     queryResult: { isLoading, isError, data: product },
     mutationResult,
-  } = useProduct(id || "");
+  } = useProduct(id || "", { allowNewProduct: true });
 
   const formTitle = id === "new" ? "Nuevo producto" : "Editar producto";
   const formSubtitle =
