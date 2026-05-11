@@ -150,14 +150,14 @@ const AdminProductForm = function (props: Props) {
       <div className="flex justify-between gap-4">
         <AdminPagePresentation title={title} subtitle={subtitle} />
         <div className="flex justify-end mb-10 gap-4">
-          <Button variant="outline">
+          <Button type="button" variant="outline">
             <Link to="/admin/products" className="flex items-center gap-2">
               <X className="w-4 h-4" />
               Cancelar
             </Link>
           </Button>
 
-          <Button disabled={isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             <SaveAll className="w-4 h-4" />
             Guardar cambios
           </Button>
