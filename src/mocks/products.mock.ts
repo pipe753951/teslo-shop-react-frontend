@@ -1,3 +1,5 @@
+// TODO: Remove mock.
+
 // Import all product images
 import blackTshirt from "@/assets/product-black-tshirt.jpg";
 import whiteHoodie from "@/assets/product-white-hoodie.jpg";
