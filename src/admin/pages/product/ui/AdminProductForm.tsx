@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useRef, useState, type KeyboardEvent } from "react";
 
 import { Link } from "react-router";
 import { useForm } from "react-hook-form";
 
-import { SaveAll, Tag, Upload, X } from "lucide-react";
+import { Plus, SaveAll, Tag, Upload, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -26,6 +26,8 @@ const availableProductSizes: ProductSize[] = ["XS", "S", "M", "L", "XL", "XXL"];
 
 const AdminProductForm = function ({ title, subtitle, product }: Props) {
   const [dragActive, setDragActive] = useState(false);
+  const tagInputRef = useRef<null | HTMLInputElement>(null);
+
   const {
     formState: { errors },
     getValues,
@@ -37,10 +39,21 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
     defaultValues: product,
   });
 
+  const currentStock = watch("stock");
   const selectedSizes = watch("sizes");
-  console.debug({ selectedSizes });
+  const selectedTags = watch("tags");
 
   const addTag = () => {
+    const newTagSet = new Set(getValues("tags"));
+    const newTag = tagInputRef.current?.value.trim();
+
+    if (!newTag) return;
+
+    newTagSet.add(newTag);
+    setValue("tags", Array.from(newTagSet));
+
+    console.debug({ tagSet: newTagSet });
+
     // if (newTag.trim() && !product.tags.includes(newTag.trim())) {
     // setProduct((prev) => ({
     //   ...prev,
@@ -49,7 +62,14 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
     // }s
   };
 
-  const removeTag = (tagToRemove: string) => {
+  const removeTag = (tag: string) => {
+    const newTagSet = new Set(getValues("tags"));
+
+    newTagSet.delete(tag);
+    setValue("tags", Array.from(newTagSet));
+
+    console.debug({ tagSet: newTagSet });
+
     // setProduct((prev) => ({
     //   ...prev,
     //   tags: prev.tags.filter((tag) => tag !== tagToRemove),
@@ -57,11 +77,11 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
   };
 
   const addSize = (size: ProductSize) => {
-    const sizeSet = new Set(getValues("sizes"));
-    sizeSet.add(size);
-    setValue("sizes", Array.from(sizeSet));
+    const newSizeSet = new Set(getValues("sizes"));
+    newSizeSet.add(size);
+    setValue("sizes", Array.from(newSizeSet));
 
-    console.debug(sizeSet);
+    console.debug(newSizeSet);
 
     // if (!product.sizes.includes(size)) {
     //   setProduct((prev) => ({
@@ -72,16 +92,29 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
   };
 
   const removeSize = (size: ProductSize) => {
-    const sizeSet = new Set(getValues("sizes"));
-    sizeSet.delete(size);
-    setValue("sizes", Array.from(sizeSet));
+    const newSizeSet = new Set(getValues("sizes"));
+    newSizeSet.delete(size);
+    setValue("sizes", Array.from(newSizeSet));
 
-    console.debug(sizeSet);
+    console.debug(newSizeSet);
 
     // setProduct((prev) => ({
     //   ...prev,
     //   sizes: prev.sizes.filter((size) => size !== sizeToRemove),
     // }));
+  };
+
+  const handleTagInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" || event.key === "," || event.key === ";") {
+      event.preventDefault();
+      addTag();
+      tagInputRef.current!.value = "";
+    }
+  };
+
+  const handleAddTagButtonClick = () => {
+    addTag();
+    tagInputRef.current!.value = "";
   };
 
   const handleDrag = (e: React.DragEvent) => {
@@ -200,6 +233,7 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
                       //   handleInputChange("stock", parseInt(e.target.value))
                       // }
                       {...register("stock", { required: true, min: 1 })}
+                      min={0}
                       className={errors.stock && "border-2 border-destructive"}
                       placeholder="Unidades del producto"
                     />
@@ -342,7 +376,7 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
 
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-2">
-                  {product.tags.map((tag) => (
+                  {selectedTags.map((tag) => (
                     <span
                       key={tag}
                       className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800 border border-green-200"
@@ -350,8 +384,8 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
                       <Tag className="h-3 w-3 mr-1" />
                       {tag}
                       <button
-                        // onClick={() => removeTag(tag)}
-                        className="ml-2 text-green-600 hover:text-green-800 transition-colors duration-200"
+                        onClick={() => removeTag(tag)}
+                        className="ml-2 text-green-600 cursor-pointer hover:text-green-800 transition-colors duration-200"
                       >
                         <X className="h-3 w-3" />
                       </button>
@@ -362,16 +396,22 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
                 <div className="flex gap-2">
                   <input
                     type="text"
+                    ref={tagInputRef}
                     // value={newTag}
                     // onChange={(e) => setNewTag(e.target.value)}
                     // onKeyDown={(e) => e.key === "Enter" && addTag()}
+                    onKeyDown={handleTagInputKeyDown}
                     placeholder="Añadir nueva etiqueta..."
                     className="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   />
-                  {/* TODO: Implementarb */}
-                  {/* <Button onClick={addTag} className="px-4 py-2rounded-lg ">
-                    <Plus className="h-4 w-4" />
-                  </Button> */}
+                  {/* TODO: Implementar */}
+                  <Button
+                    onClick={handleAddTagButtonClick}
+                    size="icon-lg"
+                    className="size-11 rounded-lg"
+                  >
+                    <Plus className="size-5" />
+                  </Button>
                 </div>
               </div>
             </div>
@@ -463,22 +503,25 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
-                  <span className="text-sm font-medium text-slate-700">
+                <div className="flex gap-2 items-center justify-between p-3 bg-slate-50 rounded-lg">
+                  <span className="flex-1 text-sm font-medium text-slate-700">
                     Inventario
+                  </span>
+                  <span className="text-sm text-slate-600">
+                    {`${currentStock} ${currentStock == 1 ? "unidad" : "unidades"}`}
                   </span>
                   <span
                     className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      product.stock > 5
+                      currentStock > 5
                         ? "bg-green-100 text-green-800"
-                        : product.stock > 0
+                        : currentStock > 0
                           ? "bg-yellow-100 text-yellow-800"
                           : "bg-red-100 text-red-800"
                     }`}
                   >
-                    {product.stock > 5
+                    {currentStock > 5
                       ? "En stock"
-                      : product.stock > 0
+                      : currentStock > 0
                         ? "Bajo stock"
                         : "Sin stock"}
                   </span>
