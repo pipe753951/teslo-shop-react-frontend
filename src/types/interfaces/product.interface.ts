@@ -11,7 +11,7 @@ export interface Product {
   gender: ProductGender;
   tags: string[];
   images: string[];
-  user: User;
+  user?: User;
 }
 
 export type ProductSize = "XS" | "S" | "M" | "L" | "XL" | "XXL";

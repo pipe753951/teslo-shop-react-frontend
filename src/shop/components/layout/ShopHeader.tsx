@@ -3,7 +3,7 @@ import { Link, useParams, useSearchParams } from "react-router";
 
 import { cn } from "@/lib/utils";
 
-import { ChartArea, LoaderCircle, Search } from "lucide-react";
+import { ChartArea, Search } from "lucide-react";
 
 import useAuthStore from "@/auth/store/auth.store";
 

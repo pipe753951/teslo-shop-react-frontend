@@ -1,4 +1,4 @@
-const getUsernameInitials = (username: string): string => {
+const formatUsernameInitials = (username: string): string => {
   const separatedNames = username.split(" ");
 
   const initialsArray = separatedNames.map(
@@ -11,4 +11,4 @@ const getUsernameInitials = (username: string): string => {
   return initialsArray.join("");
 };
 
-export default getUsernameInitials;
+export default formatUsernameInitials;

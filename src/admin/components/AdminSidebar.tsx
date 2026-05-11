@@ -14,7 +14,7 @@ import {
   type LucideProps,
 } from "lucide-react";
 
-import getUsernameInitials from "@/lib/app_helpers/getUsernameInitials.helper";
+import formatUsernameInitials from "@/lib/app_helpers/formatUsernameInitials.helper.formatter";
 
 import useAuthStore from "@/auth/store/auth.store";
 
@@ -107,7 +107,7 @@ const AdminSidebar: React.FC<SidebarProps> = function ({
         <div className="p-4 border-t border-g ray-200">
           <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer">
             <UserProfileCircle
-              usernameInitials={getUsernameInitials(user!.fullName)}
+              usernameInitials={formatUsernameInitials(user!.fullName)}
             />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-900 truncate">
