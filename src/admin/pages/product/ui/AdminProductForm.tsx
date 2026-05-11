@@ -7,7 +7,10 @@ import { SaveAll, Tag, Upload, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-import type { Product } from "@/types/interfaces/product.interface";
+import type {
+  Product,
+  ProductSize,
+} from "@/types/interfaces/product.interface";
 
 import AdminFormInput from "@/admin/components/form/AdminFormInput";
 import AdminPagePresentation from "@/admin/components/AdminPagePresentation";
@@ -19,17 +22,23 @@ interface Props {
   product: Product;
 }
 
-const availableProductSizes = ["XS", "S", "M", "L", "XL", "XXL"];
+const availableProductSizes: ProductSize[] = ["XS", "S", "M", "L", "XL", "XXL"];
 
 const AdminProductForm = function ({ title, subtitle, product }: Props) {
   const [dragActive, setDragActive] = useState(false);
   const {
     formState: { errors },
+    getValues,
     handleSubmit,
     register,
+    setValue,
+    watch,
   } = useForm({
     defaultValues: product,
   });
+
+  const selectedSizes = watch("sizes");
+  console.debug({ selectedSizes });
 
   const addTag = () => {
     // if (newTag.trim() && !product.tags.includes(newTag.trim())) {
@@ -47,7 +56,13 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
     // }));
   };
 
-  const addSize = (size: string) => {
+  const addSize = (size: ProductSize) => {
+    const sizeSet = new Set(getValues("sizes"));
+    sizeSet.add(size);
+    setValue("sizes", Array.from(sizeSet));
+
+    console.debug(sizeSet);
+
     // if (!product.sizes.includes(size)) {
     //   setProduct((prev) => ({
     //     ...prev,
@@ -270,20 +285,24 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
 
               <div className="space-y-4">
                 <div className="flex flex-wrap gap-2">
-                  {product.sizes.map((size) => (
-                    <span
-                      key={size}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200"
-                    >
-                      {size}
-                      <button
-                        // onClick={() => removeSize(size)}
-                        className="ml-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                  {availableProductSizes
+                    .filter((availableProductSize) =>
+                      selectedSizes.includes(availableProductSize),
+                    )
+                    .map((size) => (
+                      <span
+                        key={size}
+                        className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 border border-blue-200"
                       >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </span>
-                  ))}
+                        {size}
+                        <button
+                          // onClick={() => removeSize(size)}
+                          className="ml-2 text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </span>
+                    ))}
                 </div>
 
                 <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-200">
@@ -293,13 +312,14 @@ const AdminProductForm = function ({ title, subtitle, product }: Props) {
                   {availableProductSizes.map((size) => (
                     <button
                       key={size}
-                      // onClick={() => addSize(size)}
-                      // disabled={product.sizes.includes(size)}
-                      // className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
-                      //   product.sizes.includes(size)
-                      //     ? "bg-slate-100 text-slate-400 cursor-not-allowed"
-                      //     : "bg-slate-200 text-slate-700 hover:bg-slate-300 cursor-pointer"
-                      // }`}
+                      type="button"
+                      onClick={() => addSize(size)}
+                      disabled={selectedSizes.includes(size)}
+                      className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-200 ${
+                        selectedSizes.includes(size)
+                          ? "bg-slate-100 text-slate-400 cursor-not-allowed"
+                          : "bg-slate-200 text-slate-700 hover:bg-slate-300 cursor-pointer"
+                      }`}
                     >
                       {size}
                     </button>
