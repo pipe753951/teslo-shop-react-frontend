@@ -16,6 +16,10 @@ import AdminFormInput from "@/admin/components/form/AdminFormInput";
 import AdminPagePresentation from "@/admin/components/AdminPagePresentation";
 import AdminFormTextarea from "@/admin/components/form/AdminFormTextarea";
 
+interface ProductFormInputs extends Product {
+  imageFiles?: File[];
+}
+
 interface Props {
   title: string;
   subtitle: string;
@@ -30,7 +34,9 @@ const availableProductSizes: ProductSize[] = ["XS", "S", "M", "L", "XL", "XXL"];
 
 const AdminProductForm = function (props: Props) {
   const { title, subtitle, product, isSubmitting, onSubmit } = props;
+
   const [dragActive, setDragActive] = useState(false);
+
   const tagInputRef = useRef<null | HTMLInputElement>(null);
 
   const {
@@ -40,13 +46,19 @@ const AdminProductForm = function (props: Props) {
     register,
     setValue,
     watch,
-  } = useForm({
+  } = useForm<ProductFormInputs>({
     defaultValues: product,
   });
 
   const currentStock = watch("stock");
   const selectedSizes = watch("sizes");
   const selectedTags = watch("tags");
+  const selectedFilesToUpload = watch("imageFiles");
+
+  const handleFinalSubmitStep = async (productLike: Partial<Product>) => {
+    await onSubmit(productLike);
+    setValue("imageFiles", undefined);
+  };
 
   const addTag = () => {
     const newTagSet = new Set(getValues("tags"));
@@ -109,6 +121,11 @@ const AdminProductForm = function (props: Props) {
     // }));
   };
 
+  const addImageFiles = (files: FileList) => {
+    const previousImageFiles: File[] = getValues("imageFiles") || [];
+    setValue("imageFiles", [...previousImageFiles, ...files]);
+  };
+
   const handleTagInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" || event.key === "," || event.key === ";") {
       event.preventDefault();
@@ -138,15 +155,21 @@ const AdminProductForm = function (props: Props) {
     setDragActive(false);
     const files = e.dataTransfer.files;
     console.log(files);
+
+    if (!files) return;
+    addImageFiles(files);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     console.log(files);
+
+    if (!files) return;
+    addImageFiles(files);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+    <form onSubmit={handleSubmit(handleFinalSubmitStep)} className="p-6">
       <div className="flex justify-between gap-4">
         <AdminPagePresentation title={title} subtitle={subtitle} />
         <div className="flex justify-end mb-10 gap-4">
@@ -458,6 +481,35 @@ const AdminProductForm = function (props: Props) {
                     PNG, JPG, WebP hasta 10MB cada una
                   </p>
                 </div>
+              </div>
+
+              {/* Images to upload */}
+              <div className="mt-6 space-y-3">
+                <h3 className="text-sm font-medium text-slate-700">
+                  Imágenes por cargar
+                </h3>
+                {!selectedFilesToUpload ? (
+                  <div className="font-medium w-full p-4 bg-chart-1/40 rounded-xl border border-chart-1">
+                    No hay imágenes seleccionadas
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    {selectedFilesToUpload?.map((file, index) => (
+                      <div key={index}>
+                        <div className="aspect-square bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center">
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt="Product"
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        </div>
+                        <p className="mt-1 text-xs text-slate-600 truncate">
+                          {file.name}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Current Images */}

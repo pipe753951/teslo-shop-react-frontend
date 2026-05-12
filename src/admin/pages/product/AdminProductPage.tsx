@@ -28,7 +28,9 @@ const AdminProductPage = function () {
       ? "Aquí puedes crear un nuevo producto."
       : "Aquí puedes editar el producto.";
 
-  const handleSubmitProductForm = async (productLike: Partial<Product>) => {
+  const handleSubmitProductForm = async (
+    productLike: Partial<Product> & { imageFiles?: File[] },
+  ) => {
     if (mutationResult.isPending) return;
 
     await mutationResult.mutateAsync(productLike, {
