@@ -55,6 +55,11 @@ const AdminProductForm = function (props: Props) {
   const selectedTags = watch("tags");
   const selectedFilesToUpload = watch("imageFiles");
 
+  const handleFinalSubmitStep = async (productLike: Partial<Product>) => {
+    await onSubmit(productLike);
+    setValue("imageFiles", undefined);
+  };
+
   const addTag = () => {
     const newTagSet = new Set(getValues("tags"));
     const newTag = tagInputRef.current?.value.trim();
@@ -164,7 +169,7 @@ const AdminProductForm = function (props: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+    <form onSubmit={handleSubmit(handleFinalSubmitStep)} className="p-6">
       <div className="flex justify-between gap-4">
         <AdminPagePresentation title={title} subtitle={subtitle} />
         <div className="flex justify-end mb-10 gap-4">
