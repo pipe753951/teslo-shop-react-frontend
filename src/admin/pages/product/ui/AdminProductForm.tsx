@@ -30,7 +30,10 @@ const availableProductSizes: ProductSize[] = ["XS", "S", "M", "L", "XL", "XXL"];
 
 const AdminProductForm = function (props: Props) {
   const { title, subtitle, product, isSubmitting, onSubmit } = props;
+
   const [dragActive, setDragActive] = useState(false);
+  const [currentFiles, setFiles] = useState<File[]>([]);
+
   const tagInputRef = useRef<null | HTMLInputElement>(null);
 
   const {
@@ -109,6 +112,10 @@ const AdminProductForm = function (props: Props) {
     // }));
   };
 
+  const addFiles = (files: FileList) => {
+    setFiles((prevFiles) => [...prevFiles, ...files]);
+  };
+
   const handleTagInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" || event.key === "," || event.key === ";") {
       event.preventDefault();
@@ -138,11 +145,17 @@ const AdminProductForm = function (props: Props) {
     setDragActive(false);
     const files = e.dataTransfer.files;
     console.log(files);
+
+    if (!files) return;
+    addFiles(files);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     console.log(files);
+
+    if (!files) return;
+    addFiles(files);
   };
 
   return (
@@ -458,6 +471,35 @@ const AdminProductForm = function (props: Props) {
                     PNG, JPG, WebP hasta 10MB cada una
                   </p>
                 </div>
+              </div>
+
+              {/* Images to upload */}
+              <div className="mt-6 space-y-3">
+                <h3 className="text-sm font-medium text-slate-700">
+                  Imágenes por cargar
+                </h3>
+                {currentFiles.length === 0 ? (
+                  <div className="font-medium w-full p-4 bg-chart-1/40 rounded-xl border border-chart-1">
+                    No hay imágenes seleccionadas
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    {currentFiles.map((file, index) => (
+                      <div key={index}>
+                        <div className="aspect-square bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center">
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt="Product"
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        </div>
+                        <p className="mt-1 text-xs text-slate-600 truncate">
+                          {file.name}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Current Images */}
