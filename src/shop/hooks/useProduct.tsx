@@ -39,8 +39,6 @@ const useProduct = function (
   const mutationResult = useMutation({
     mutationFn: createOrUpdateProduct,
     onSuccess(productData: Product) {
-      console.info("Todo salió bien", { productData });
-
       // Invalidar caché.
       queryClient.invalidateQueries(queryOptions({ queryKey: ["products"] }));
       queryClient.invalidateQueries(queryOptions({ queryKey: ["product"] }));

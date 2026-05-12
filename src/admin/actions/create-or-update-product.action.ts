@@ -2,9 +2,14 @@ import { TESLO_API_BASE_URL, tesloApi } from "@/api/tesloApi";
 import type { Product } from "@/types/interfaces/product.interface";
 
 const createOrUpdateProduct = async function (
-  productLike: Partial<Product>,
+  productLike: Partial<Product> & { imageFiles?: File[] },
 ): Promise<Product> {
-  const { id, images = [], ...restProductLikeProperties } = productLike;
+  const {
+    id,
+    images = [],
+    imageFiles = [],
+    ...restProductLikeProperties
+  } = productLike;
   delete restProductLikeProperties.user;
 
   const isCreatingProduct = id === "new";

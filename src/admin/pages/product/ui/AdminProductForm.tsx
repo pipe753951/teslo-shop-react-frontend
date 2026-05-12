@@ -16,6 +16,10 @@ import AdminFormInput from "@/admin/components/form/AdminFormInput";
 import AdminPagePresentation from "@/admin/components/AdminPagePresentation";
 import AdminFormTextarea from "@/admin/components/form/AdminFormTextarea";
 
+interface ProductFormInputs extends Product {
+  imageFiles?: File[];
+}
+
 interface Props {
   title: string;
   subtitle: string;
@@ -32,7 +36,6 @@ const AdminProductForm = function (props: Props) {
   const { title, subtitle, product, isSubmitting, onSubmit } = props;
 
   const [dragActive, setDragActive] = useState(false);
-  const [currentFiles, setFiles] = useState<File[]>([]);
 
   const tagInputRef = useRef<null | HTMLInputElement>(null);
 
@@ -43,13 +46,14 @@ const AdminProductForm = function (props: Props) {
     register,
     setValue,
     watch,
-  } = useForm({
+  } = useForm<ProductFormInputs>({
     defaultValues: product,
   });
 
   const currentStock = watch("stock");
   const selectedSizes = watch("sizes");
   const selectedTags = watch("tags");
+  const selectedFilesToUpload = watch("imageFiles");
 
   const addTag = () => {
     const newTagSet = new Set(getValues("tags"));
@@ -112,8 +116,9 @@ const AdminProductForm = function (props: Props) {
     // }));
   };
 
-  const addFiles = (files: FileList) => {
-    setFiles((prevFiles) => [...prevFiles, ...files]);
+  const addImageFiles = (files: FileList) => {
+    const previousImageFiles: File[] = getValues("imageFiles") || [];
+    setValue("imageFiles", [...previousImageFiles, ...files]);
   };
 
   const handleTagInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -147,7 +152,7 @@ const AdminProductForm = function (props: Props) {
     console.log(files);
 
     if (!files) return;
-    addFiles(files);
+    addImageFiles(files);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,7 +160,7 @@ const AdminProductForm = function (props: Props) {
     console.log(files);
 
     if (!files) return;
-    addFiles(files);
+    addImageFiles(files);
   };
 
   return (
@@ -478,13 +483,13 @@ const AdminProductForm = function (props: Props) {
                 <h3 className="text-sm font-medium text-slate-700">
                   Imágenes por cargar
                 </h3>
-                {currentFiles.length === 0 ? (
+                {!selectedFilesToUpload ? (
                   <div className="font-medium w-full p-4 bg-chart-1/40 rounded-xl border border-chart-1">
                     No hay imágenes seleccionadas
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 gap-3">
-                    {currentFiles.map((file, index) => (
+                    {selectedFilesToUpload?.map((file, index) => (
                       <div key={index}>
                         <div className="aspect-square bg-slate-100 rounded-lg border border-slate-200 flex items-center justify-center">
                           <img
